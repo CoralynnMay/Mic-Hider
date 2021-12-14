@@ -57,12 +57,11 @@ namespace Mic_Hider
             }
 
         }
-
         public override void OnUpdate()
         {
-            if (showOnTalkBool)
+            if (okayToRun && showOnTalkBool)
             {
-                if (okayToRun && voiceDotGraphic.color.a > 0.5)
+                if (voiceDotGraphic.color.a > 0.5)
                 {
                     voiceDot.transform.localScale = Vector3.one;
                 }
