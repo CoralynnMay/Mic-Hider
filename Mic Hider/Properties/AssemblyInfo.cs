@@ -35,5 +35,5 @@ using MelonLoader;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: MelonInfo(typeof(Mic_Hider.MicHider), "Mic Hider", "0.1.0", "CoralynnMay")]
+[assembly: MelonInfo(typeof(Mic_Hider.MicHider), "Mic Hider", "1.0.0", "CoralynnMay")]
 [assembly: MelonGame("VRChat", "VRChat")]
