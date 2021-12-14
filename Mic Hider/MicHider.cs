@@ -23,7 +23,7 @@ namespace Mic_Hider
                 setMicState();
             };
             hideMicBool = hideMic.Value;
-            showOnTalk = category.CreateEntry("showOnTalk", false, "Show on talk", "Show icon when when you talk");
+            showOnTalk = category.CreateEntry("showOnTalk", false, "Show on talk", "Show icon when you talk");
             showOnTalk.OnValueChanged += (_, v) =>
             {
                 showOnTalkBool = v;
