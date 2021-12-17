@@ -1,74 +1,59 @@
-﻿using MelonLoader;
+﻿using System.Collections;
+using MelonLoader;
 using UnityEngine;
-using UnityEngine.UI;
+
 namespace Mic_Hider
 {
-    public class MicHider: MelonMod
+    public class MicHider : MelonMod
     {
-        GameObject voiceDot;
-        Graphic voiceDotGraphic;
-        bool hideMicBool = true;
-        bool showOnTalkBool = false;
-        bool okayToRun = false;
-        MelonPreferences_Entry<bool> hideMic;
-        MelonPreferences_Entry<bool> showOnTalk;
+
+        private MelonPreferences_Entry<bool> hideMic;
+        private MelonPreferences_Entry<bool> showOnTalk;
+        private HudVoiceIndicator hudVoiceIndicator;
+        private Color originalEnabledColor;
+        private Color originalDisabledColor;
 
         public override void OnApplicationStart()
         {
             var category = MelonPreferences.CreateCategory("MicHider", "Mic Hider");
             hideMic = category.CreateEntry("hideMic", true, "Hide mic", "Hide mic icon when not muted");
-            hideMic.OnValueChanged += (_, v) =>
-            {
-                hideMicBool = v;
-                setMicState();
-            };
-            hideMicBool = hideMic.Value;
+            hideMic.OnValueChanged += (_, v) => UpdateMicState(v, showOnTalk.Value);
             showOnTalk = category.CreateEntry("showOnTalk", false, "Show on talk", "Show icon when you talk");
-            showOnTalk.OnValueChanged += (_, v) =>
-            {
-                showOnTalkBool = v;
-                setMicState();
-            };
-            showOnTalkBool = showOnTalk.Value;
+            showOnTalk.OnValueChanged += (_, v) => UpdateMicState(hideMic.Value, v);
+
+            MelonCoroutines.Start(Init());
         }
 
-        private void setMicState()
+        private IEnumerator Init()
         {
-            if (hideMicBool)
-            {
-                voiceDot.transform.localScale = Vector3.zero;
-                MelonLogger.Msg("Voicedot set to vanished!");
-            } else
-            {
-                
-                voiceDot.transform.localScale = Vector3.one;
-                MelonLogger.Msg("Voicedot set to Visible!");
-            }
+            while (VRCUiManager.field_Private_Static_VRCUiManager_0 == null) yield return null;
+
+            hudVoiceIndicator = GameObject.Find("UserInterface/UnscaledUI/HudContent").GetComponent<HudVoiceIndicator>();
+            originalEnabledColor = hudVoiceIndicator.field_Private_Color_0;
+            originalDisabledColor = hudVoiceIndicator.field_Private_Color_1;
+
+            UpdateMicState(hideMic.Value, showOnTalk.Value);
         }
 
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        private void UpdateMicState(bool shouldHideMic, bool shouldShowOnTalk)
         {
-            if (sceneName == "ui")
+            if (shouldHideMic)
             {
-                voiceDot = GameObject.Find("VoiceDot");
-                voiceDotGraphic = voiceDot.GetComponent<Image>().GetComponent<Graphic>();
-                setMicState();
-                okayToRun = true;
-            }
-
-        }
-        public override void OnUpdate()
-        {
-            if (okayToRun && showOnTalkBool)
-            {
-                if (voiceDotGraphic.color.a > 0.5)
-                {
-                    voiceDot.transform.localScale = Vector3.one;
-                }
+                if (!shouldShowOnTalk)
+                    hudVoiceIndicator.field_Private_Color_0 = new Color(0, 0, 0, 0);
                 else
-                {
-                    voiceDot.transform.localScale = Vector3.zero;
-                }
+                    hudVoiceIndicator.field_Private_Color_0 = originalEnabledColor;
+
+                hudVoiceIndicator.field_Private_Color_1 = new Color(0, 0, 0, 0);
+
+                MelonLogger.Msg("Voicedot is now hidden (" + (shouldShowOnTalk ? "visible while talking" : "completely") + ").");
+            }
+            else
+            {
+                hudVoiceIndicator.field_Private_Color_0 = originalEnabledColor;
+                hudVoiceIndicator.field_Private_Color_1 = originalDisabledColor;
+
+                MelonLogger.Msg("Voicedot is now visible.");
             }
         }
     }
