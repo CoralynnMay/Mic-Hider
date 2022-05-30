@@ -24,7 +24,7 @@ namespace Mic_Hider
             hideMic.OnValueChanged += (_, v) => UpdateMicState(v, showOnTalk.Value, hideMuteIcon.Value);
             showOnTalk = category.CreateEntry("showOnTalk", false, "Show on talk", "Show icon when you talk");
             showOnTalk.OnValueChanged += (_, v) => UpdateMicState(hideMic.Value, v, hideMuteIcon.Value);
-            hideMuteIcon = category.CreateEntry("hideMuteIcon", false, "HideMuteIcon", "Hide Mute Icon");
+            hideMuteIcon = category.CreateEntry("hideMuteIcon", false, "Hide Mute Icon", "Hide Mute Icon");
             hideMuteIcon.OnValueChanged += (_, v) => UpdateMicState(hideMic.Value, showOnTalk.Value, v);
 
             MelonCoroutines.Start(Init());
