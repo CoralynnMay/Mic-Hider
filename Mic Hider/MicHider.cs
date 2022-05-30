@@ -34,11 +34,11 @@ namespace Mic_Hider
         {
             while (VRCUiManager.field_Private_Static_VRCUiManager_0 == null) yield return null;
 
-            hudVoiceIndicator = GameObject.Find("UserInterface/UnscaledUI/HudContent").GetComponent<HudVoiceIndicator>();
+            hudVoiceIndicator = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old").GetComponent<HudVoiceIndicator>();
             originalEnabledColor = hudVoiceIndicator.field_Private_Color_0;
             originalDisabledColor = hudVoiceIndicator.field_Private_Color_1;
 
-            fadeCycleEffect = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>();
+            fadeCycleEffect = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>();
             originalMuteFadeLow = fadeCycleEffect.field_Public_Single_1;
             originalMuteFadeHigh = fadeCycleEffect.field_Public_Single_2;
 
